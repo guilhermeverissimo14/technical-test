@@ -23,9 +23,10 @@ const RadioBrowser = () => {
   if (isLoading) return <div>Loading...</div>;
 
   return (
-    <div className="radio-browser">
+    <div className="p-5 min-w[800px] m-auto">
       <div className="search">
         <input
+          className="w-full p-3 mb-5  text-md"
           type="text"
           placeholder="Search for radio..."
           value={searchQuery}
@@ -33,9 +34,9 @@ const RadioBrowser = () => {
         />
       </div>
 
-      <div className="radio-list">
-        {data?.map((radio: any) => (
-          <div key={radio.stationuuid} className="radio-item">
+      <div className="flex flex-col gap-3">
+        {data?.map((radio) => (
+          <div key={radio.stationuuid} className="flex justify-between p-3 border-[#ddd] border-1 border-solid">
             <span>{radio.name}</span>
             <button onClick={() => handlePlay(radio.url_resolved)}>Play</button>
             <button onClick={handleStop}>Stop</button>
@@ -46,7 +47,7 @@ const RadioBrowser = () => {
         ))}
       </div>
 
-      <div className="pagination">
+      <div className="flex justify-between mt-5">
         <button onClick={() => setPage((old) => Math.max(old - 1, 0))} disabled={page === 0}>
           Previous
         </button>
@@ -56,7 +57,7 @@ const RadioBrowser = () => {
       </div>
 
       {playingUrl && (
-        <div className="audio-player">
+        <div className="mt-5">
           <audio src={playingUrl} controls autoPlay />
         </div>
       )}

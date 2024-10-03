@@ -1,7 +1,7 @@
 "use client";
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
-interface Radio {
+export interface Radio {
     id: string;
     name: string;
     country: string;
@@ -29,13 +29,15 @@ export const useRadio = () => {
 export const RadioProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [radios, setRadios] = useState<Radio[]>([]);
 
-    useEffect(() => {
-        const savedRadios = JSON.parse(localStorage.getItem('radios') || '[]');
-        setRadios(savedRadios);
-    }, []);
+    // useEffect(() => {
+    //     const savedRadios = ;
+    //     console.log("Save radios")
+    //     setRadios(savedRadios);
+    // }, []);
 
     useEffect(() => {
         localStorage.setItem('radios', JSON.stringify(radios));
+        console.log(JSON.parse(localStorage.getItem('radios') || '[]'))
     }, [radios]);
 
     const addRadio = (radio: Radio) => {
