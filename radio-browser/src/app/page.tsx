@@ -23,10 +23,10 @@ const RadioBrowser = () => {
   if (isLoading) return <div>Loading...</div>;
 
   return (
-    <div className="p-5 min-w[800px] m-auto">
+    <div>
       <div className="search">
         <input
-          className="w-full p-3 mb-5  text-md"
+          className="w-full p-3 mb-5  text-md bg-transparent"
           type="text"
           placeholder="Search for radio..."
           value={searchQuery}
