@@ -5,7 +5,6 @@ import { Inter } from "next/font/google";
 
 import { metadata } from "./seo";
 import "./globals.css";
-import Header from '@/components/Header';
 
 const queryClient = new QueryClient();
 
@@ -27,8 +26,6 @@ export default function RootLayout({
           <RadioProvider>
             <title>{metadata.title}</title>  {/* Use metadata.title */}
             <meta name="description" content={metadata.description} />
-
-            <Header />
 
             {children}
 

@@ -1,7 +1,11 @@
 "use client";
 import { useState } from 'react';
+import { notFound } from 'next/navigation';
+
 import { useRadios } from './_services/useRadios';
 import { useRadio } from './_contexts/radioContext';
+
+import Header from '@/components/Header';
 
 const RadioBrowser = () => {
   const [page, setPage] = useState(0);
@@ -18,12 +22,22 @@ const RadioBrowser = () => {
     setPlayingUrl(null);
   };
 
-  if (isError) return <div>Error ao listar os dados na tela...</div>;
+  if (isError) return notFound();
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) {
+    return (
+      <div className='h-ful w-full flex items-center justify-center'>
+        <h1 className='text-white text-2xl'>Carregando...</h1>
+      </div>
+    )
+  }
+
 
   return (
     <div>
+
+      <Header />
+
       <div className="search">
         <input
           className="w-full p-3 mb-5  text-md bg-transparent"
@@ -48,7 +62,7 @@ const RadioBrowser = () => {
       </div>
 
       <div className="flex justify-between mt-5">
-        <button onClick={() => setPage((old) => Math.max(old - 1, 0))} disabled={page === 0}>
+        <button >
           Previous
         </button>
         <button onClick={() => setPage((old) => old + 1)} disabled={data?.length < 10}>
