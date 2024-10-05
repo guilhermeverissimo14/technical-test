@@ -62,14 +62,14 @@ const SidebarButton = () => {
                         />
                     </div>
 
-                    {data.map((stations) => (
+                    {data?.map((stations) => (
 
                         <div className="flex bg-[#4c4c55] p-[6px] rounded-sm">
-                            <span className=" text-white">{stations.name}</span>
+                            <span className="text-white">{stations.name}</span>
                         </div>
                     ))}
 
-                    {data.length <= 0 && (
+                    {(data?.length ?? 0) <= 0 && (
                         <h1 className="w-full text-center text-white font-bold size-2xl">Nenhuma rádio encontrada...</h1>
                     )}
 
