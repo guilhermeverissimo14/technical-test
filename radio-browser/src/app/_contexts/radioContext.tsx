@@ -12,6 +12,7 @@ export interface Radio {
 interface RadioContextType {
     radios: Radio[];
     addRadio: (radio: Radio) => void;
+    isFavorite: (id: string) => boolean;
     removeRadio: (id: string) => void;
     editRadio: (radio: Radio) => void;
 }
@@ -27,13 +28,13 @@ export const useRadio = () => {
 };
 
 export const RadioProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+
     const [radios, setRadios] = useState<Radio[]>([]);
 
-    // useEffect(() => {
-    //     const savedRadios = ;
-    //     console.log("Save radios")
-    //     setRadios(savedRadios);
-    // }, []);
+    useEffect(() => {
+        const savedRadios = JSON.parse(localStorage.getItem('radios') || '[]');
+        setRadios(savedRadios);
+    }, []);
 
     useEffect(() => {
         localStorage.setItem('radios', JSON.stringify(radios));
@@ -41,19 +42,35 @@ export const RadioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }, [radios]);
 
     const addRadio = (radio: Radio) => {
-        setRadios([...radios, radio]);
+        setRadios(prevRadios => {
+            const updatedRadios = [...prevRadios, radio];
+            localStorage.setItem('radios', JSON.stringify(updatedRadios));
+            return updatedRadios;
+        });
     };
 
+    const isFavorite = (id: string) => {
+        return radios.some(radio => radio.id === id);
+    }
+
     const removeRadio = (id: string) => {
-        setRadios(radios.filter(radio => radio.id !== id));
+        setRadios(prevRadios => {
+            const updatedRadios = prevRadios.filter(radio => radio.id !== id);
+            localStorage.setItem('radios', JSON.stringify(updatedRadios));
+            return updatedRadios;
+        });
     };
 
     const editRadio = (editedRadio: Radio) => {
-        setRadios(radios.map(radio => (radio.id === editedRadio.id ? editedRadio : radio)));
+        setRadios(prevRadios => {
+            const updatedRadios = prevRadios.map(radio => (radio.id === editedRadio.id ? editedRadio : radio));
+            localStorage.setItem('radios', JSON.stringify(updatedRadios));
+            return updatedRadios;
+        });
     };
 
     return (
-        <RadioContext.Provider value={{ radios, addRadio, removeRadio, editRadio }}>
+        <RadioContext.Provider value={{ radios, addRadio, isFavorite, removeRadio, editRadio }}>
             {children}
         </RadioContext.Provider>
     );

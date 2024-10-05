@@ -1,22 +1,22 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { notFound } from "next/navigation";
 
-import { ChevronLeftIcon, ChevronRightIcon, MenuIcon, Search } from "lucide-react";
+import { ChevronLeftIcon, ChevronRightIcon, Heart, MenuIcon, Search } from "lucide-react";
 import { Button } from "./ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
 import { useRadios } from "@/app/_services/useRadios";
+import { useRadio } from "@/app/_contexts/radioContext";
+import InputSearch from "./Input-search";
 
 const SidebarButton = () => {
 
     const [searchQuery, setSearchQuery] = useState('');
+    const [favorite, setFavorite] = useState<Boolean>();
     const [page, setPage] = useState(0)
     const { data, isLoading, isError } = useRadios(page, searchQuery);
-
-    useEffect(() => {
-        console.log(data)
-    }, [searchQuery])
+    const { addRadio, isFavorite } = useRadio();
 
     if (isError) {
         return notFound();
@@ -50,22 +50,25 @@ const SidebarButton = () => {
 
                 <div className="h-full pt-5 flex flex-col justify-between gap-4" >
 
-                    <div className="bg-[#4c4c55] flex items-center gap-2 rounded-sm w-full p-1 mb-3  hover:border-2 hover:border-white">
-
-                        <Search className="text-white" />
-                        <input
-                            className="bg-transparent w-full text-white outline-none p-1"
-                            placeholder="Pesquisar rádio..."
-                            type="text"
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                        />
-                    </div>
+                    <InputSearch
+                        placeholder="Pesquisar rádio..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                    />
 
                     {data?.map((stations) => (
 
-                        <div className="flex bg-[#4c4c55] p-[6px] rounded-sm">
+                        <div key={stations.id} className="flex items-center justify-between bg-[#4c4c55] p-[6px] rounded-sm">
                             <span className="text-white">{stations.name}</span>
+                            {stations ? (
+                                <Button onClick={() => addRadio(stations)}>
+                                    <Heart className=" text-red-500" size="icon" />
+                                </Button>
+                            ) : (
+                                <Button onClick={() => addRadio(stations)}>
+                                    <Heart className=" " size="icon" />
+                                </Button>
+                            )}
                         </div>
                     ))}
 
