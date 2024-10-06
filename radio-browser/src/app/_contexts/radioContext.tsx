@@ -1,18 +1,18 @@
 "use client";
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 
 export interface Radio {
-    id: string;
     name: string;
     country: string;
     language: string;
     url: string;
+    stationuuid: string;
+    url_resolved: string;
 }
 
 interface RadioContextType {
     radios: Radio[];
     addRadio: (radio: Radio) => void;
-    isFavorite: (id: string) => boolean;
     removeRadio: (id: string) => void;
     editRadio: (radio: Radio) => void;
 }
@@ -31,16 +31,6 @@ export const RadioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
     const [radios, setRadios] = useState<Radio[]>([]);
 
-    useEffect(() => {
-        const savedRadios = JSON.parse(localStorage.getItem('radios') || '[]');
-        setRadios(savedRadios);
-    }, []);
-
-    useEffect(() => {
-        localStorage.setItem('radios', JSON.stringify(radios));
-        console.log(JSON.parse(localStorage.getItem('radios') || '[]'))
-    }, [radios]);
-
     const addRadio = (radio: Radio) => {
         setRadios(prevRadios => {
             const updatedRadios = [...prevRadios, radio];
@@ -49,13 +39,10 @@ export const RadioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         });
     };
 
-    const isFavorite = (id: string) => {
-        return radios.some(radio => radio.id === id);
-    }
-
-    const removeRadio = (id: string) => {
+    const removeRadio = (stationuuid: string) => {
         setRadios(prevRadios => {
-            const updatedRadios = prevRadios.filter(radio => radio.id !== id);
+            const updatedRadios = prevRadios.filter(radio => radio.stationuuid !== stationuuid);
+            console.log(updatedRadios);
             localStorage.setItem('radios', JSON.stringify(updatedRadios));
             return updatedRadios;
         });
@@ -63,14 +50,16 @@ export const RadioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
     const editRadio = (editedRadio: Radio) => {
         setRadios(prevRadios => {
-            const updatedRadios = prevRadios.map(radio => (radio.id === editedRadio.id ? editedRadio : radio));
+            const updatedRadios = prevRadios.map(radio => (radio.stationuuid === editedRadio.stationuuid ? editedRadio : radio));
             localStorage.setItem('radios', JSON.stringify(updatedRadios));
             return updatedRadios;
         });
     };
 
+    const value = React.useMemo(() => ({ radios, addRadio, removeRadio, editRadio }), [radios]);
+
     return (
-        <RadioContext.Provider value={{ radios, addRadio, isFavorite, removeRadio, editRadio }}>
+        <RadioContext.Provider value={value}>
             {children}
         </RadioContext.Provider>
     );

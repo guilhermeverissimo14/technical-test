@@ -2,21 +2,21 @@
 
 import { useState } from "react";
 import { notFound } from "next/navigation";
+import { ChevronLeftIcon, ChevronRightIcon, Heart, MenuIcon } from "lucide-react";
 
-import { ChevronLeftIcon, ChevronRightIcon, Heart, MenuIcon, Search } from "lucide-react";
 import { Button } from "./ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
+import InputSearch from "./Input-search";
+
 import { useRadios } from "@/app/_services/useRadios";
 import { useRadio } from "@/app/_contexts/radioContext";
-import InputSearch from "./Input-search";
 
 const SidebarButton = () => {
 
     const [searchQuery, setSearchQuery] = useState('');
-    const [favorite, setFavorite] = useState<Boolean>();
     const [page, setPage] = useState(0)
     const { data, isLoading, isError } = useRadios(page, searchQuery);
-    const { addRadio, isFavorite } = useRadio();
+    const { radios, addRadio, removeRadio } = useRadio();
 
     if (isError) {
         return notFound();
@@ -24,8 +24,8 @@ const SidebarButton = () => {
 
     if (isLoading) {
         return (
-            <div className='h-ful w-full flex items-center justify-center'>
-                <h1 className='text-white text-2xl'>Carregando...</h1>
+            <div className='h-ful w-full'>
+                <span className='text-white text-sm'>Carregando...</span>
             </div>
         )
     }
@@ -58,15 +58,20 @@ const SidebarButton = () => {
 
                     {data?.map((stations) => (
 
-                        <div key={stations.id} className="flex items-center justify-between bg-[#4c4c55] p-[6px] rounded-sm">
+                        <div key={stations.stationuuid} className="flex items-center justify-between bg-[#4c4c55] p-[6px] rounded-sm">
                             <span className="text-white">{stations.name}</span>
-                            {stations ? (
-                                <Button onClick={() => addRadio(stations)}>
-                                    <Heart className=" text-red-500" size="icon" />
+
+                            {radios?.some((fav) => fav.stationuuid === stations.stationuuid) ? (
+                                <Button
+                                    onClick={() => removeRadio(stations.stationuuid)}
+                                >
+                                    <Heart className="text-red-500" size="icon" />
                                 </Button>
                             ) : (
-                                <Button onClick={() => addRadio(stations)}>
-                                    <Heart className=" " size="icon" />
+                                <Button
+                                    onClick={() => addRadio(stations)}
+                                >
+                                    <Heart size="icon" />
                                 </Button>
                             )}
                         </div>
