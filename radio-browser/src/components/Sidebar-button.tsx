@@ -2,12 +2,12 @@
 
 import { useState } from "react";
 import { notFound } from "next/navigation";
-import { ChevronLeftIcon, ChevronRightIcon, Heart, MenuIcon } from "lucide-react";
+import { ChevronLeftIcon, ChevronRightIcon, MenuIcon } from "lucide-react";
 
 import { Button } from "./ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
-import { TooltipContent, TooltipProvider, TooltipTrigger, Tooltip } from "./ui/tooltip";
 import InputSearch from "./Input-search";
+import FavoriteButton from "./Favorite-button";
 
 import { useRadios } from "@/app/_services/useRadios";
 import { useRadio } from "@/app/_contexts/radioContext";
@@ -62,33 +62,8 @@ const SidebarButton = () => {
                         <div key={stations.stationuuid} className="flex items-center justify-between bg-[#4c4c55] p-[6px] rounded-sm">
                             <span className="text-white">{stations.name}</span>
 
-                            {radios?.some((fav) => fav.stationuuid === stations.stationuuid) ? (
-                                <TooltipProvider>
-                                    <Tooltip>
-                                        <TooltipTrigger asChild>
-                                            <Button onClick={() => removeRadio(stations.stationuuid)}>
-                                                <Heart className="text-red-500" size="icon" />
-                                            </Button>
-                                        </TooltipTrigger>
-                                        <TooltipContent>
-                                            <p className="text-[#4c4c55] semi-bold">Remover dos favoritos</p>
-                                        </TooltipContent>
-                                    </Tooltip>
-                                </TooltipProvider>
-                            ) : (
-                                <TooltipProvider>
-                                    <Tooltip>
-                                        <TooltipTrigger asChild>
-                                            <Button onClick={() => addRadio(stations)}>
-                                                <Heart size="icon" />
-                                            </Button>
-                                        </TooltipTrigger>
-                                        <TooltipContent>
-                                            <p className="text-[#4c4c55] semi-bold" >Adicionar aos favoritos</p>
-                                        </TooltipContent>
-                                    </Tooltip>
-                                </TooltipProvider>
-                            )}
+                            <FavoriteButton station={stations} />
+
                         </div>
                     ))}
 
