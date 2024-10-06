@@ -1,37 +1,53 @@
 "use client";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { Edit, PlayCircle, StopCircle } from 'lucide-react';
 
-import { useRadios } from './_services/useRadios';
-import { useRadio } from './_contexts/radioContext';
+import { Radio, useRadio } from './_contexts/radioContext';
 
 import Header from '@/components/Header';
-import { Edit, PlayCircle, StopCircle, Trash } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import InputSearch from '@/components/Input-search';
+import DeleteRadioDialog from '@/components/Delete-dialog';
+import SidebarButton from '@/components/Sidebar-button';
 
 const RadioBrowser = () => {
-  const [page, setPage] = useState(0);
-  const [searchQuery, setSearchQuery] = useState('');
-  const { data, isLoading } = useRadios(page, searchQuery);
-  const { radios, addRadio, removeRadio, editRadio } = useRadio();
-  const [playingUrl, setPlayingUrl] = useState<string | null>(null);
+  const [searchFavorites, setSearchFavorites] = useState('');
+  const { radios, removeRadio } = useRadio();
 
-  const handlePlay = (url: string) => {
+  const [playingUrl, setPlayingUrl] = useState<string | null>(null);
+  const [statusAudio, setStatusAudio] = useState<string | null>(null);
+  const [dataFavorites, setDataFavorites] = useState<Radio[]>([])
+  const [stationToDelete, setStationToDelete] = useState<string | null>(null);
+
+  const handlePlay = (url: string, stationuuid: string) => {
     setPlayingUrl(url);
+    setStatusAudio(stationuuid);
   };
 
   const handleStop = () => {
     setPlayingUrl(null);
+    setStatusAudio(null);
   };
 
+  const confirmDelete = (stationuuid: string) => {
+    setStationToDelete(stationuuid);
+  };
 
-  if (isLoading) {
-    return (
-      <div className='h-[100vh] w-full flex items-center justify-center'>
-        <h1 className='text-white text-2xl'>Carregando...</h1>
-      </div>
-    )
-  }
+  const deleteRadio = () => {
+
+    if (stationToDelete) {
+      removeRadio(stationToDelete);
+      setStationToDelete(null);
+    }
+  };
+
+  useEffect(() => {
+    const savedRadios = JSON.parse(localStorage.getItem('radios') || '[]');
+
+    const filterFavorites = savedRadios.filter((radio: Radio) => radio.name.toLowerCase().includes(searchFavorites.toLowerCase()));
+    setDataFavorites(filterFavorites);
+
+  }, [radios, searchFavorites]);
 
 
   return (
@@ -41,81 +57,107 @@ const RadioBrowser = () => {
 
       <main className='w-[90%] mt-5'>
 
-        <section className='flex items-center justify-between mb-5'>
+        <section className='flex items-center gap-3 justify-between mb-5'>
 
-          <span className='text-white font-bold text-lg'>Radios favoritas</span>
+          <span className='text-white font-bold text-sm md:text-lg whitespace-nowrap'>
+            Rádios favoritas
+          </span>
 
           <InputSearch
-            placeholder="Pesquisar rádio..."
+            placeholder="Pesquisar rádio favorita..."
+            value={searchFavorites}
+            onChange={e => setSearchFavorites(e.target.value)}
           />
 
         </section>
 
-        <section className='h-[75vh] bg-[#4b4b54] rounded-md' >
+        <section className='h-[73vh] bg-[#4b4b54] rounded-md overflow-y-auto mb-5' >
 
           <article className='flex p-5 gap-3 border-b-2 border-[#73737f]'>
             <StopCircle />
-            <span className='text-white'>Nome da Rádio Atual</span>
+            <span className='text-white font-semibold'>Nome da Rádio Atual</span>
           </article>
 
-          <article className='flex justify-between bg-white p-5 overflow-y-auto mb-2'>
 
-            <div className='flex items-center gap-3'>
-              <Button size="icon" className='bg-[#4c4c55]'>
-                <PlayCircle />
-              </Button>
+          {dataFavorites.map((item) => (
+            <article key={item.stationuuid} className='flex justify-between bg-white p-5 mb-2'>
 
-              <div>
-                <h4 className='font-bold'>Testes</h4>
-                <span>Minas, Gerais</span>
+              <div className='flex items-center gap-3'>
+
+                {statusAudio === item.stationuuid ? (
+                  <Button
+                    onClick={handleStop}
+                    size="icon"
+                    className='bg-[#4c4c55]'
+                  >
+
+                    <StopCircle />
+
+                  </Button>
+                ) : (
+                  <Button
+                    onClick={() => handlePlay(item.url_resolved, item.stationuuid)}
+                    size="icon"
+                    className='bg-[#4c4c55]'
+                  >
+
+                    <PlayCircle />
+
+                  </Button>
+                )}
+
+                <div>
+                  <h4 className='font-bold'>
+                    {item.name.length > 30 ? item.name.substring(0, 20) + '...' : item.name}
+                  </h4>
+                  <span className='text-sm'>
+                    {item.country.length > 30 ? item.country.substring(0, 20) + '...' : item.country}
+                  </span>
+                </div>
               </div>
+
+              <div className='flex items-center gap-3'>
+
+                <Button size="icon" className='bg-transparent'>
+                  <Edit className='text-black hover:text-white' />
+                </Button>
+
+                <DeleteRadioDialog
+                  stationuuid={item.stationuuid}
+                  onDelete={deleteRadio}
+                  onConfirmDelete={confirmDelete}
+                />
+
+              </div>
+
+            </article>
+          ))}
+
+          {dataFavorites.length <= 0 && (
+            <div className='h-full w-full p-3 flex items-center gap-3 flex-col justify-center'>
+              <h1 className='text-white text-center text-sm md:text-lg font-bold'>
+                Você não possui nenhuma rádio favorita
+              </h1>
+
+              <h3 className='text-[#f2f3f5] text-sm text-center'>
+                Clique no botão abaixo 👇 e selecione suas rádias favoritas
+              </h3>
+
+              <SidebarButton />
             </div>
-
-            <div className='flex items-center gap-3'>
-
-              <Button size="icon" className='bg-transparent'>
-                <Edit className='text-black hover:text-white' />
-              </Button>
-
-              <Button size="icon" className='bg-transparent hover:text-white'>
-                <Trash className='text-black hover:text-white' />
-              </Button>
-
-            </div>
-
-          </article>
+          )}
 
         </section>
 
       </main>
 
-      {/* <div className="flex flex-col gap-3">
-        {data?.map((radio) => (
-          <div key={radio.stationuuid} className="flex justify-between p-3 border-[#ddd] border-1 border-solid">
-            <span>{radio.name}</span>
-            <button onClick={() => handlePlay(radio.url_resolved)}>Play</button>
-            <button onClick={handleStop}>Stop</button>
-            <button onClick={() => addRadio(radio)}>Add</button>
-            <button onClick={() => removeRadio(radio.stationuuid)}>Remove</button>
-            <button onClick={() => editRadio({ ...radio, name: 'Edited Name' })}>Edit</button>
-          </div>
-        ))}
-      </div>
-
-      <div className="flex justify-between mt-5">
-        <button >
-          Previous
-        </button>
-        <button onClick={() => setPage((old) => old + 1)} disabled={data?.length < 10}>
-          Next
-        </button>
-      </div>
-
       {playingUrl && (
         <div className="mt-5">
-          <audio src={playingUrl} controls autoPlay />
+          <audio src={playingUrl} controls autoPlay>
+            <track kind="captions" />
+          </audio>
         </div>
-      )} */}
+      )}
 
     </div>
   );

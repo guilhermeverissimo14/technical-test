@@ -3,8 +3,8 @@ import { Card, CardContent } from "./ui/card";
 
 const Header = () => {
     return (
-        <Card className="w-full bg-transparent border-transparent ">
-            <CardContent className=" flex flex-grow p-5  items-center ">
+        <Card className="w-full bg-transparent border-transparent">
+            <CardContent className=" flex pt-3 flex-grow   items-center ">
 
                 <SidebarButton />
 

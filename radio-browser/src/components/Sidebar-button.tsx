@@ -10,14 +10,12 @@ import InputSearch from "./Input-search";
 import FavoriteButton from "./Favorite-button";
 
 import { useRadios } from "@/app/_services/useRadios";
-import { useRadio } from "@/app/_contexts/radioContext";
 
 const SidebarButton = () => {
 
     const [searchQuery, setSearchQuery] = useState('');
     const [page, setPage] = useState(0)
     const { data, isLoading, isError } = useRadios(page, searchQuery);
-    const { radios, addRadio, removeRadio } = useRadio();
 
     if (isError) {
         return notFound();
@@ -25,7 +23,7 @@ const SidebarButton = () => {
 
     if (isLoading) {
         return (
-            <div className='h-ful w-full'>
+            <div className='h-ful w-full flex items-center justify-center'>
                 <span className='text-white text-sm'>Carregando...</span>
             </div>
         )

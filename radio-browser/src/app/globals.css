@@ -5,6 +5,7 @@
 body {
   font-family: Arial, Helvetica, sans-serif;
   background-color: #2b2b30;
+  overflow-y: hidden;
   /* background-color: #18181b; */
 }
 
