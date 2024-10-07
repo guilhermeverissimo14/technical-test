@@ -24,8 +24,8 @@ export default function RootLayout({
       >
         <QueryClientProvider client={queryClient}>
           <RadioProvider>
-            <title>{metadata.title}</title>
-            <meta name="description" content={metadata.description} />
+            <title>{metadata?.title}</title>
+            <meta name="description" content={metadata?.description} />
 
             {children}
 
