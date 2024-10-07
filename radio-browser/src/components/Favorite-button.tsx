@@ -18,8 +18,8 @@ const FavoriteButton = ({ station }: FavoriteButtonProps) => {
         <TooltipProvider>
             <Tooltip>
                 <TooltipTrigger asChild>
-                    <Button onClick={() => isFavorite ? removeRadio(station.stationuuid) : addRadio(station)}>
-                        <Heart className={isFavorite ? "text-red-500" : ""} size="icon" />
+                    <Button size="icon" onClick={() => isFavorite ? removeRadio(station.stationuuid) : addRadio(station)}>
+                        <Heart className={isFavorite ? "text-red-500" : ""} />
                     </Button>
                 </TooltipTrigger>
                 <TooltipContent>

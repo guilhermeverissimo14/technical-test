@@ -58,7 +58,9 @@ const SidebarButton = () => {
                     {data?.map((stations) => (
 
                         <div key={stations.stationuuid} className="flex items-center justify-between bg-[#4c4c55] p-[6px] rounded-sm">
-                            <span className="text-white">{stations.name}</span>
+                            <span className="text-white">
+                                {stations.name.length > 30 ? stations.name.substring(0, 20) + '...' : stations.name}
+                            </span>
 
                             <FavoriteButton station={stations} />
 
