@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from 'react';
-import { Edit, PlayCircle, StopCircle } from 'lucide-react';
+import { PlayCircle, StopCircle } from 'lucide-react';
 
 import { Radio, useRadio } from './_contexts/radioContext';
 
