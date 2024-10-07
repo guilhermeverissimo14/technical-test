@@ -75,10 +75,10 @@ const RadioBrowser = () => {
 
         <section className='h-[73vh] bg-[#4b4b54] rounded-md overflow-y-auto mb-5' >
 
-          <article className='flex items-center justify-between p-3 gap-3 border-b-2 border-[#73737f]'>
+          <article className='flex flex-col md:flex-row items-center justify-between p-3 gap-3 border-b-2 border-[#73737f]'>
 
             {radioName && (
-              <span className='text-white font-semibold'>{radioName}</span>
+              <span className='text-white text-center font-semibold'>{radioName}</span>
             )}
 
             {playingUrl && (
