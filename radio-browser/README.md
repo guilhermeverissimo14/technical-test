@@ -1,6 +1,9 @@
 
 ![image](https://github.com/user-attachments/assets/d089be5d-acbc-4858-b1eb-e05982d76666)  ![image](https://github.com/user-attachments/assets/382b1b27-a592-41ae-9ecc-4d94cb111250)
 
+## 🔗 Link da aplicação
+
+[Acesse a aplicação aqui](https://technical-test-neon.vercel.app/)
 
 
 ## 🔥 Introdução
