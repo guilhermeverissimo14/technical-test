@@ -1,36 +1,56 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-## Getting Started
+![image](https://github.com/user-attachments/assets/d089be5d-acbc-4858-b1eb-e05982d76666)  ![image](https://github.com/user-attachments/assets/382b1b27-a592-41ae-9ecc-4d94cb111250)
 
-First, run the development server:
 
+
+## 🔥 Introdução
+
+Com este projeto, você pode criar sua própria rádio online personalizada. Adicione suas estações favoritas ao menu lateral e elas estarão sempre disponíveis na tela inicial. Com apenas um toque, você pode iniciar a reprodução da sua rádio preferida e curtir sua programação.
+
+### ⚙️ Pré-requisitos
+Para a instalação desse projeto na sua máquina é necessario ter o node instalado apartir da versão 20. 
+
+### 🔨 Guia de instalação
+Para rodar esse projeto na sua máquina é necessário seguir os seguintes passos:
+
+Passo 1: Clonar o repositório
+
+Primeiro, clone o repositório para a sua máquina local. Abra o terminal e execute o comando:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/guilhermeverissimo14/technical-test.git
+cd technical-test
+cd radio-browser
+```
+Passo 2: Instale Node.js
+
+Certifique-se de que você tem a versão 20 do [Node js](https://nodejs.org/en) instalada. Você pode verificar sua versão do Node.js com o seguinte comando:
+```bash
+node -v
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Passo 3: Instale as dependências do projeto
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Dentro do diretório do projeto clonado, instale as dependências necessárias:
+```bash
+npm install
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Passo 5: Iniciar o servidor de desenvolvimento
 
-## Learn More
+Execute `npm run dev` para um servidor de desenvolvimento. Navegue até `http://localhost:3000/`. O aplicativo será recarregado automaticamente se você alterar algum dos arquivos de origem.
+```bash
+npm run dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+## 📦 Tecnologias usadas:
+[Next](https://nextjs.org/)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+[TypeScript](https://www.typescriptlang.org/)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+[Tailwindcss](https://tailwindcss.com/)
 
-## Deploy on Vercel
+[Shadcn](https://ui.shadcn.com/)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+[React-query](https://www.npmjs.com/package/react-query)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+[Context Api](https://legacy.reactjs.org/docs/context.html)
