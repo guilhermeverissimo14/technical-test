@@ -131,10 +131,6 @@ const RadioBrowser = () => {
 
               <div className='flex items-center gap-3'>
 
-                <Button size="icon" className='bg-transparent'>
-                  <Edit className='text-black hover:text-white' />
-                </Button>
-
                 <DeleteRadioDialog
                   stationuuid={item.stationuuid}
                   onDelete={deleteRadio}
