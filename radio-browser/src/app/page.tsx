@@ -18,15 +18,18 @@ const RadioBrowser = () => {
   const [statusAudio, setStatusAudio] = useState<string | null>(null);
   const [dataFavorites, setDataFavorites] = useState<Radio[]>([])
   const [stationToDelete, setStationToDelete] = useState<string | null>(null);
+  const [radioName, setRadioName] = useState<string | null>(null);
 
-  const handlePlay = (url: string, stationuuid: string) => {
+  const handlePlay = (url: string, stationuuid: string, name: string) => {
     setPlayingUrl(url);
     setStatusAudio(stationuuid);
+    setRadioName(name);
   };
 
   const handleStop = () => {
     setPlayingUrl(null);
     setStatusAudio(null);
+    setRadioName(null)
   };
 
   const confirmDelete = (stationuuid: string) => {
@@ -43,7 +46,6 @@ const RadioBrowser = () => {
 
   useEffect(() => {
     const savedRadios = JSON.parse(localStorage.getItem('radios') || '[]');
-
     const filterFavorites = savedRadios.filter((radio: Radio) => radio.name.toLowerCase().includes(searchFavorites.toLowerCase()));
     setDataFavorites(filterFavorites);
 
@@ -73,9 +75,20 @@ const RadioBrowser = () => {
 
         <section className='h-[73vh] bg-[#4b4b54] rounded-md overflow-y-auto mb-5' >
 
-          <article className='flex p-5 gap-3 border-b-2 border-[#73737f]'>
-            <StopCircle />
-            <span className='text-white font-semibold'>Nome da Rádio Atual</span>
+          <article className='flex items-center justify-between p-3 gap-3 border-b-2 border-[#73737f]'>
+
+            {radioName && (
+              <span className='text-white font-semibold'>{radioName}</span>
+            )}
+
+            {playingUrl && (
+              <div>
+                <audio className=' bg-[#f1f3f4] rounded-sm' src={playingUrl} controls autoPlay>
+                  <track kind="captions" />
+                </audio>
+              </div>
+            )}
+
           </article>
 
 
@@ -96,7 +109,7 @@ const RadioBrowser = () => {
                   </Button>
                 ) : (
                   <Button
-                    onClick={() => handlePlay(item.url_resolved, item.stationuuid)}
+                    onClick={() => handlePlay(item.url_resolved, item.stationuuid, item.name)}
                     size="icon"
                     className='bg-[#4c4c55]'
                   >
@@ -146,18 +159,8 @@ const RadioBrowser = () => {
               <SidebarButton />
             </div>
           )}
-
         </section>
-
       </main>
-
-      {playingUrl && (
-        <div className="mt-5">
-          <audio src={playingUrl} controls autoPlay>
-            <track kind="captions" />
-          </audio>
-        </div>
-      )}
 
     </div>
   );
